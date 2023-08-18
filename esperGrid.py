@@ -24,6 +24,9 @@ class textgrid:
     self.column_gap = column_gap
     self.content = [[None for h in range(self.height)] for w in range(self.width)]
 
+  def __repr__(self):
+    return str(self.content)
+  
   def __str__(self):
     output = ''
     max = self.find_max()
@@ -39,8 +42,20 @@ class textgrid:
         output += '\n'
     return output
 
-    def __get__(self):
-      pass
+  def __getitem__(self, coord):
+    return self.content[coord[0]][coord[1]]
+
+  def __setitem__(self, coord, value):
+    if value != None:
+      value = str(value)
+    self.content[coord[0]][coord[1]] = value
+
+  def __contains__(self, item):
+    for y in range(self.height):
+      for x in range(self.width):
+        if self.content[x][y] == item:
+          return True
+    return False
 
   ## FUNCTIONS ##
 
@@ -66,20 +81,23 @@ class textgrid:
 
   ## METHODS ##
 
-  def set(self, item, coord=(0,0)):
-    item = str(item)
-    self.content[coord[0]][coord[1]] = item
-
-  def set_many(self, item, coords=[(0,0)]):
+  def set_many(self, value, coords=[(0,0)]):
     for coord in coords:
-      self.set(item, coord)
+      self[coord] = value
 
-  def spread(self, item, quantity: int=1):
+  def spread(self, value, quantity: int=1):
     quantity = int(quantity)
+    visited = []
     for i in range(quantity):
-      self.set(item,(rn.randint(0,self.width-1),
-                   rn.randint(0,self.height-1)))
+      coord = None
+      while coord in visited or coord == None:
+        coord = (rn.randint(0,self.width-1), 
+                 rn.randint(0,self.height-1))
+      visited.append(coord)
+      self[coord] = value
 
 grid = textgrid(placeholder='.')
-grid.spread('#', 3)
+grid.spread('#', 95)
+grid[3,3], grid[4,4] = 'A', 'B'
 print(grid)
+print(grid[(3,3)])
