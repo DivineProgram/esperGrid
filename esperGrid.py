@@ -85,6 +85,16 @@ class textgrid:
     for coord in coords:
       self[coord] = value
 
+  def move(self, coordA, coordB, copy=False):
+    self[coordB] = self[coordA]
+    if not copy:
+      self[coordA] = None
+
+  def swap(self, coordA, coordB):
+    tempA = self[coordA]
+    self[coordA] = self[coordB]
+    self[coordB] = tempA
+
   def spread(self, value, quantity: int=1):
     quantity = int(quantity)
     visited = []
@@ -95,9 +105,3 @@ class textgrid:
                  rn.randint(0,self.height-1))
       visited.append(coord)
       self[coord] = value
-
-grid = textgrid(placeholder='.')
-grid.spread('#', 95)
-grid[3,3], grid[4,4] = 'A', 'B'
-print(grid)
-print(grid[(3,3)])
