@@ -6,7 +6,7 @@ import random as rn
 '''
 A makeshift module by Aden L
 Used to make grids in the form of strings printed in the terminal
-Good fo simple programs that need a simple grid UI
+Good for simple programs that need a simple grid UI
 '''
 
 ############### GENERAL ###############
@@ -112,9 +112,3 @@ class textgrid:
                  rn.randint(0,self.height-1))
       visited.append(coord)
       self[coord] = value
-
-grid = textgrid()
-grid.spread('.',50)
-print(grid)
-grid.replace('.','#')
-print(grid)
