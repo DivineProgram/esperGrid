@@ -1,8 +1,7 @@
 
 import random as rn
-from math import sqrt
 
-# EsperGrid v2.0
+# EsperGrid v2.13.0
 
 '''
 A makeshift module by Aden L
@@ -81,21 +80,29 @@ class textgrid:
 
   ## METHODS ##
 
-  def set_many(self, value, coords=[(0,0)]):
+  def set_many(self, value, coords):
     for coord in coords:
       self[coord] = value
 
-  def move(self, coordA, coordB, copy=False):
-    self[coordB] = self[coordA]
+  def move(self, coord_a, coord_b, copy=False):
+    self[coord_b] = self[coord_a]
     if not copy:
-      self[coordA] = None
+      self[coord_a] = None
 
-  def swap(self, coordA, coordB):
-    tempA = self[coordA]
-    self[coordA] = self[coordB]
-    self[coordB] = tempA
+  def swap(self, coord_a, coord_b):
+    temp_a = self[coord_a]
+    self[coord_a] = self[coord_b]
+    self[coord_b] = temp_a
 
-  def spread(self, value, quantity: int=1):
+  def replace(self, value, new_value, limit =-1, random =True):
+    coords = self.index(value)
+    if len(coords) > limit > 0:
+      if random:
+        rn.shuffle(coords)
+      coords = coords[:limit]
+    self.set_many(new_value, coords)
+
+  def spread(self, value, quantity =1):
     quantity = int(quantity)
     visited = []
     for i in range(quantity):
@@ -105,3 +112,9 @@ class textgrid:
                  rn.randint(0,self.height-1))
       visited.append(coord)
       self[coord] = value
+
+grid = textgrid()
+grid.spread('.',50)
+print(grid)
+grid.replace('.','#')
+print(grid)
